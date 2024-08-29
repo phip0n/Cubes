@@ -47,7 +47,7 @@ public class CubesSpawner : MonoBehaviour
 
     private void RemoveFromList(Cube cube)
     {
-        if(_cubes.Contains(cube))///////////////////////////////////////////////////////////////////////////
+        if(_cubes.Contains(cube))
         {
             _cubes.Remove(cube);
         }
