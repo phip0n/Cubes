@@ -55,7 +55,9 @@ public class CubesSpawner : MonoBehaviour
 
     private Cube CreateCube(Vector3 position, Vector3 scale, double chance = 1)
     {
-        Vector3 force = new Vector3(_rand.Next(-100, 100), _rand.Next(-100, 100), _rand.Next(-100, 100)).normalized * _force;
+        int minRandom = -100;
+        int maxRandom = 100;
+        Vector3 force = new Vector3(_rand.Next(minRandom, maxRandom), _rand.Next(minRandom, maxRandom), _rand.Next(minRandom, maxRandom)).normalized * _force;
         Cube newCube = Instantiate(_cubePrefab, position, Quaternion.Euler(Vector3.zero));
         _cubes.Add(newCube);
         newCube.transform.localScale = scale;
