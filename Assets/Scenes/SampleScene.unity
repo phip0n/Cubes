@@ -419,7 +419,7 @@ MonoBehaviour:
   _shardsChanceMultiplier: 0.5
   _shardsMinNumber: 2
   _shardsMaxNumber: 6
-  _force: 1000
+  _forceValue: 1000
   _scaleMultiplier: 0.5
   _initialCubesQuantity: 10
 --- !u!1 &1718262161

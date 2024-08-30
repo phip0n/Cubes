@@ -1,28 +1,12 @@
-using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Cube : MonoBehaviour
 {
-    private static System.Random _rand = new System.Random();
-    public event Action<Cube> CubeExploding;
-    public event Action<Cube> CubeDisabled;
+    public UnityEvent<Cube> Exploding;
+    public UnityEvent<Cube> Disabled;
 
-    public double ShardsChance { get; private set; }
-
-    public void AddForce(Vector3 force)
-    {
-        GetComponent<Rigidbody>().AddForce(force);
-    }
-
-    public void SetShardsChance(double chance)
-    {
-        ShardsChance = chance;
-    }
-
-    public void ChangeColor()
-    {
-        GetComponent<Renderer>().material.color = new Color((float)_rand.NextDouble(), (float)_rand.NextDouble(), (float)_rand.NextDouble());
-    }
+    public float ShardsChance { get; private set; }
 
     private void Start()
     {
@@ -31,7 +15,7 @@ public class Cube : MonoBehaviour
 
     private void OnDisable()
     {
-        CubeDisabled?.Invoke(this);
+        Disabled?.Invoke(this);
     }
 
     private void OnMouseUpAsButton()
@@ -39,9 +23,44 @@ public class Cube : MonoBehaviour
         Explode();
     }
 
+    public void Init(Vector3 scale, float shardsChance, float forceValue)
+    {
+        transform.localScale = scale;
+        SetShardsChance(shardsChance);
+        Vector3 force = Random.insideUnitSphere.normalized * forceValue;
+        AddForce(force);
+    }
+
+    public void SetShardsChance(float chance)
+    {
+        ShardsChance = chance;
+    }
+
+    public void ChangeColor()
+    {
+        if (TryGetComponent<Renderer>(out Renderer renderer))
+        {
+            renderer.material.color = Random.ColorHSV();
+        }
+    }
+
+    private void AddForce(Vector3 force)
+    {
+        if (TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
+        {
+            rigidbody.AddForce(force);
+        }
+    }
+
     private void Explode()
     {
-        CubeExploding?.Invoke(this);
+        float randomValue = Random.value;
+
+        if (randomValue < ShardsChance)
+        {
+            Exploding?.Invoke(this);
+        }
+
         Destroy(gameObject);
     }
 }
