@@ -1,16 +1,21 @@
 using UnityEngine;
-using UnityEngine.Events;
+using System;
+[RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(Rigidbody))]
 
 public class Cube : MonoBehaviour
 {
-    public UnityEvent<Cube> Exploding;
-    public UnityEvent<Cube> Disabled;
+    public event Action<Cube> Exploding;
+    public event Action<Cube> Disabled;
+    private Renderer _renderer;
+    private Rigidbody _rigidbody;
 
     public float ShardsChance { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
-        ChangeColor();
+        _renderer = GetComponent<Renderer>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnDisable()
@@ -25,36 +30,31 @@ public class Cube : MonoBehaviour
 
     public void Init(Vector3 scale, float shardsChance, float forceValue)
     {
+        ChangeColor();
         transform.localScale = scale;
         SetShardsChance(shardsChance);
-        Vector3 force = Random.insideUnitSphere.normalized * forceValue;
+        Vector3 force = UnityEngine.Random.insideUnitSphere.normalized * forceValue;
         AddForce(force);
     }
 
-    public void SetShardsChance(float chance)
+    private void SetShardsChance(float chance)
     {
         ShardsChance = chance;
     }
 
-    public void ChangeColor()
+    private void ChangeColor()
     {
-        if (TryGetComponent<Renderer>(out Renderer renderer))
-        {
-            renderer.material.color = Random.ColorHSV();
-        }
+        _renderer.material.color = UnityEngine.Random.ColorHSV();
     }
 
     private void AddForce(Vector3 force)
     {
-        if (TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
-        {
-            rigidbody.AddForce(force);
-        }
+        _rigidbody.AddForce(force);
     }
 
     private void Explode()
     {
-        float randomValue = Random.value;
+        float randomValue = UnityEngine.Random.value;
 
         if (randomValue < ShardsChance)
         {

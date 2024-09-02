@@ -421,7 +421,7 @@ MonoBehaviour:
   _shardsMaxNumber: 6
   _forceValue: 1000
   _scaleMultiplier: 0.5
-  _initialCubesQuantity: 10
+  _initialCubesQuantity: 30
 --- !u!1 &1718262161
 GameObject:
   m_ObjectHideFlags: 0

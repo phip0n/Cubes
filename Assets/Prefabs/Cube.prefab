@@ -146,9 +146,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a337963b312d284cb7a246da470af98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Exploding:
-    m_PersistentCalls:
-      m_Calls: []
-  Disabled:
-    m_PersistentCalls:
-      m_Calls: []

@@ -24,8 +24,8 @@ public class CubesSpawner : MonoBehaviour
     {
         foreach (Cube cube in _cubes)
         {
-            cube.Exploding.AddListener(Spawn);
-            cube.Disabled.AddListener(RemoveFromList);
+            cube.Exploding -= Spawn;
+            cube.Disabled -= RemoveFromList;
         }
     }
 
@@ -52,8 +52,8 @@ public class CubesSpawner : MonoBehaviour
         Cube newCube = Instantiate(_cubePrefab, position, Quaternion.Euler(Vector3.zero));
         _cubes.Add(newCube);
         newCube.Init(scale, chance, _forceValue);
-        newCube.Exploding.AddListener(Spawn);
-        newCube.Disabled.AddListener(RemoveFromList);
+        newCube.Exploding += Spawn;
+        newCube.Disabled += RemoveFromList;
         return newCube;
     }
 }
