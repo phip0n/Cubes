@@ -1,14 +1,15 @@
 using UnityEngine;
 using System;
+
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(Rigidbody))]
-
 public class Cube : MonoBehaviour
 {
-    public event Action<Cube> Exploding;
-    public event Action<Cube> Disabled;
     private Renderer _renderer;
     private Rigidbody _rigidbody;
+
+    public event Action<Cube> Exploding;
+    public event Action<Cube> Disabled;
 
     public float ShardsChance { get; private set; }
 

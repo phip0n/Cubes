@@ -45,15 +45,17 @@ public class CubesSpawner : MonoBehaviour
         {
             _cubes.Remove(cube);
         }
+
+        cube.Exploding -= Spawn;
+        cube.Disabled -= RemoveFromList;
     }
 
-    private Cube CreateCube(Vector3 position, Vector3 scale, float chance = 1)
+    private void CreateCube(Vector3 position, Vector3 scale, float chance = 1)
     {
         Cube newCube = Instantiate(_cubePrefab, position, Quaternion.Euler(Vector3.zero));
         _cubes.Add(newCube);
         newCube.Init(scale, chance, _forceValue);
         newCube.Exploding += Spawn;
         newCube.Disabled += RemoveFromList;
-        return newCube;
     }
 }
