@@ -3,20 +3,25 @@ using System;
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Exploder))]
 public class Cube : MonoBehaviour
 {
     private Renderer _renderer;
     private Rigidbody _rigidbody;
+    private Exploder _exploder;
 
     public event Action<Cube> Exploding;
     public event Action<Cube> Disabled;
 
     public float ShardsChance { get; private set; }
+    public float ExplosionRange => _exploder.Range;
+    public float ExplosionForce => _exploder.MaxForce;
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
         _rigidbody = GetComponent<Rigidbody>();
+        _exploder = GetComponent<Exploder>();
     }
 
     private void OnDisable()
@@ -60,6 +65,10 @@ public class Cube : MonoBehaviour
         if (randomValue < ShardsChance)
         {
             Exploding?.Invoke(this);
+        }
+        else
+        {
+            _exploder.Explode();
         }
 
         Destroy(gameObject);

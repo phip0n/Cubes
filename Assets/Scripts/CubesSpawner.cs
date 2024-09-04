@@ -9,6 +9,8 @@ public class CubesSpawner : MonoBehaviour
     [SerializeField] private int _shardsMaxNumber = 6;
     [SerializeField] private float _forceValue = 200;
     [SerializeField] private float _scaleMultiplier = 0.5f;
+    [SerializeField] private float _explosionRangeMultiplier = 2f;
+    [SerializeField] private float _explosionForceMultiplier = 8f;
     [SerializeField] private int _initialCubesQuantity = 10;
     private List<Cube> _cubes = new List<Cube>();
 
@@ -35,7 +37,8 @@ public class CubesSpawner : MonoBehaviour
 
         for (int i = 0; i < shardsNumber; i++)
         {
-            CreateCube(explodingCube.transform.position, explodingCube.transform.lossyScale * _scaleMultiplier, explodingCube.ShardsChance * _shardsChanceMultiplier);
+            CreateCube(explodingCube.transform.position, explodingCube.transform.lossyScale * _scaleMultiplier, explodingCube.ShardsChance * _shardsChanceMultiplier,
+                explodingCube.ExplosionRange * _explosionRangeMultiplier, explodingCube.ExplosionForce * _explosionForceMultiplier);
         }
     }
 
@@ -50,12 +53,23 @@ public class CubesSpawner : MonoBehaviour
         cube.Disabled -= RemoveFromList;
     }
 
-    private void CreateCube(Vector3 position, Vector3 scale, float chance = 1)
+    private void CreateCube(Vector3 position, Vector3 scale, float chance, float explosionRange, float explosionForce)
+    {
+        Cube newCube = CreateCube(position, scale, chance);
+
+        if (newCube.gameObject.TryGetComponent<Exploder>(out Exploder exploder))
+        {
+            exploder.Init(explosionRange, explosionForce);
+        }
+    }
+
+    private Cube CreateCube(Vector3 position, Vector3 scale, float chance = 1)
     {
         Cube newCube = Instantiate(_cubePrefab, position, Quaternion.Euler(Vector3.zero));
         _cubes.Add(newCube);
         newCube.Init(scale, chance, _forceValue);
         newCube.Exploding += Spawn;
         newCube.Disabled += RemoveFromList;
+        return newCube;
     }
 }
